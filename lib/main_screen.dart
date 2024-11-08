@@ -21,8 +21,8 @@ class _MainScreenState extends State<MainScreen> {
         child: Scaffold(
       appBar: AppBar(
         title: const Text("TODOs"),
-        actions: [
-          IconButton(
+      ),
+      floatingActionButton:IconButton(
               onPressed: () {
                 Navigator.push(
                     context,
@@ -33,9 +33,7 @@ class _MainScreenState extends State<MainScreen> {
                                 description: '',
                                 color: TodoColor.blue))));
               },
-              icon: const Icon(Icons.add_circle_rounded))
-        ],
-      ),
+              icon: const Icon(Icons.add_circle_rounded , size: 56,)) ,
       body: Column(
         children: [
           const Padding(
@@ -53,7 +51,7 @@ class _MainScreenState extends State<MainScreen> {
 
                     if (todoList.isEmpty) {
                       //TODO ui
-                      return const Text("Empty");
+                      return const Center(child: Text("Empty"));
                     } else {
                       return ListView.builder(
                           itemCount: todoList.length,
@@ -97,12 +95,24 @@ class TodoItem extends StatelessWidget {
             onDismissed: (direction) {
               if (direction == DismissDirection.endToStart) {
                 box.delete(todo.id);
+              } 
+              //TODO add to Done screen
+              if (direction == DismissDirection.startToEnd) {
+                box.delete(todo.id);
               }
             },
-            confirmDismiss: (direction) async =>
-                direction == DismissDirection.endToStart,
-            dismissThresholds: const {DismissDirection.endToStart: 0.3},
+            // confirmDismiss: (direction) async =>
+            //     direction == DismissDirection.endToStart,
+            dismissThresholds: const {
+              DismissDirection.endToStart: 0.3,
+              DismissDirection.startToEnd : 0.3
+              },
             background: Container(
+              padding: const EdgeInsets.all(12),
+              color: Colors.green,
+              child: const Icon(Icons.done_all),
+            ),
+            secondaryBackground: Container(
               padding: const EdgeInsets.all(12),
               color: Colors.red,
               child: const Icon(Icons.delete),
@@ -116,7 +126,7 @@ class TodoItem extends StatelessWidget {
                   Row(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(right: 4),
+                        padding: const EdgeInsets.only(right: 4),
                         child: Icon(
                           Icons.edit_note,
                           size: 24,
